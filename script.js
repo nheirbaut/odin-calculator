@@ -1,3 +1,10 @@
+function updateDisplay() {
+    const display = document.querySelector('#display');
+    const valueToSet = currentDisplayValue === '' ? '0' : currentDisplayValue;
+
+    display.textContent = valueToSet;
+}
+
 function registerClickHandlerForNumberButton(numberButton) {
     numberButton.addEventListener('click', () => {
     });
@@ -28,6 +35,9 @@ function registerClickHandlerForDotButton() {
     });
 }
 
+let currentDisplayValue = '';
+
 registerClickHandlerForNumberButtons();
 registerClickHandlerForOperationButtons();
 registerClickHandlerForDotButton();
+updateDisplay();
