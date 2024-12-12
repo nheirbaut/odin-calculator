@@ -73,7 +73,6 @@ function handleOperator(selectedOperator) {
     currentOperator = selectedOperator;
 
     display.setValue(storedValue);
-    display.acceptNewInput();
 }
 
 function performOperation(operator, value) {
@@ -144,6 +143,8 @@ const display = {
     setValue(value) {
         this.currentDisplayValue = value.toString();
         this.displayElement.textContent = this.sanitizedCurrentValue();
+
+        this.acceptNewInput();
     },
 
     sanitizedCurrentValue() {
