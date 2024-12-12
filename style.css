@@ -47,7 +47,7 @@ body {
     justify-content: center;
 }
 
-#calculator #equals-button {
+#calculator #equals {
     flex: 0 0 calc((100% - 10px)/2);
     aspect-ratio: 2/1;
 }
