@@ -1,17 +1,50 @@
 function updateDisplay() {
     const display = document.querySelector('#display');
-    const valueToSet = currentDisplayValue === '' ? '0' : currentDisplayValue;
 
-    display.textContent = valueToSet;
+    let currentValue = parseFloat(currentDisplayValue);
+
+    if (isNaN(currentValue) || currentValue === 0) {
+        currentDisplayValue = "0";
+    } else {
+        for (let i = 12; i >= 0; i--) {
+            let str = currentValue.toFixed(i);
+
+            // Remove trailing zeros and possible trailing decimal
+            str = str.replace(/0+$/, '');
+            str = str.replace(/\.$/, '');
+
+            if (str.length <= 12) {
+                currentDisplayValue = str;
+                break; // Stop at the first suitable format
+            }
+        }
+    }
+
+    display.textContent = currentDisplayValue;
+}
+
+function addCharacterToDisplay(character) {
+    if (currentDisplayValue.length === 12) {
+        return;
+    }
+    currentDisplayValue += character;
+    updateDisplay();
+}
+
+function addNumberToDisplay(number) {
+    addCharacterToDisplay(number);
 }
 
 function registerClickHandlerForNumberButton(numberButton) {
     numberButton.addEventListener('click', () => {
+        addNumberToDisplay(numberButton.textContent);
     });
 }
 
 function registerClickHandlerForOperationButton(operationButton) {
     operationButton.addEventListener('click', () => {
+        operations[operationButton.id]();
+        updateDisplay();
     });
 }
 
@@ -35,7 +68,28 @@ function registerClickHandlerForDotButton() {
     });
 }
 
+function allClear() {
+    previousDisplayValue = '';
+    currentDisplayValue = '';
+}
+
+function clear() {
+    currentDisplayValue = '';
+}
+
+function percentage() {
+    let currentValue = parseFloat(currentDisplayValue);
+    currentValue *= 0.01;
+    currentDisplayValue = currentValue.toString();
+}
+
 let currentDisplayValue = '';
+
+const operations = {
+    "all-clear": allClear,
+    "clear": clear,
+    "percentage": percentage,
+}
 
 registerClickHandlerForNumberButtons();
 registerClickHandlerForOperationButtons();
