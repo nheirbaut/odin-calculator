@@ -2,7 +2,7 @@ function registerClickHandlerForNumberButtons() {
     const numberButtons = document.querySelectorAll('.number');
     for (const numberButton of numberButtons) {
         numberButton.addEventListener('click', () => {
-            display.addCharacter(numberButton.textContent);
+            display.addCharacter(numberButton.getAttribute('data-value'));
         });
     }
 }
@@ -11,7 +11,7 @@ function registerClickHandlerForOperationButtons() {
     const operationButtons = document.querySelectorAll('.operation');
     for (const operationButton of operationButtons) {
         operationButton.addEventListener('click', () => {
-            operations[operationButton.id]();
+            operations[operationButton.getAttribute('data-value')]();
         });
     }
 }
@@ -21,6 +21,10 @@ function registerClickHandlerForDotButton() {
     dotButton.addEventListener('click', () => {
         display.addCharacter('.');
     });
+}
+
+function registerKeyPressListeners() {
+    document.addEventListener('keydown', handleKeyPress);
 }
 
 function handleAllClearOperation() {
@@ -73,6 +77,45 @@ function handleOperator(selectedOperator) {
     currentOperator = selectedOperator;
 
     display.setValue(storedValue);
+}
+
+
+function handleKeyPress(event) {
+    const keyMap = {
+        '0': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '+': 'addition',
+        '-': 'subtraction',
+        '*': 'multiplication',
+        '/': 'division',
+        '%': 'percentage',
+        '.': 'dot',
+        '=': 'equals',
+        'Enter': 'equals',
+        'c': 'clear',
+        'C': 'all-clear',
+        'Backspace': 'clear',
+        'Delete': 'all-clear',
+    };
+
+    const key = event.key;
+    const buttonId = keyMap[key];
+
+    if (buttonId) {
+        const button = document.querySelector(`[data-value="${buttonId}"]`);
+        if (button) {
+            event.preventDefault(); // Prevent default action for keys like Enter
+            button.click();
+        }
+    }
 }
 
 function performOperation(operator, value) {
@@ -172,5 +215,6 @@ const display = {
 registerClickHandlerForNumberButtons();
 registerClickHandlerForOperationButtons();
 registerClickHandlerForDotButton();
+registerKeyPressListeners()
 
 display.clear();
